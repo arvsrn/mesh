@@ -43,7 +43,7 @@
         let b = location[1] - (boundingRect.clientHeight / 2);
 
         color = chroma.lab(lightness, a, b).hex();
-    }
+    };
 
     const onMouseMove = (e: MouseEvent) => {
         if (moving) {
@@ -55,7 +55,19 @@
 
             location = location;
         }
-    }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+        if (moving) {
+            let bounds = boundingRect.getBoundingClientRect()
+            if (!bounds) return;
+
+            location[0] = Math.min(Math.max(e.touches[0].pageY - bounds.y, 12), boundingRect.clientWidth - 10);
+            location[1] = Math.min(Math.max(e.touches[0].pageX - bounds.x, 12), boundingRect.clientHeight - 10);
+
+            location = location;
+        }
+    };
 
     $: location, colorFromLocation();
 </script>
@@ -66,6 +78,15 @@
 
     location[0] = event.y - bounds.y;
     location[1] = event.x - bounds.x;
+    location = location;
+
+    moving = true;
+}} on:touchstart={(event) => {
+    let bounds = boundingRect.getBoundingClientRect()
+    if (!bounds) return;
+
+    location[0] = event.touches[0].pageY - bounds.y;
+    location[1] = event.touches[0].pageX - bounds.x;
     location = location;
 
     moving = true;
@@ -83,7 +104,7 @@
     <p class="bottom-right">Redish</p>
 </main>
 
-<svelte:window on:mousemove={onMouseMove} on:mouseup={() => moving = false}></svelte:window>
+<svelte:window on:mousemove={onMouseMove} on:mouseup={() => moving = false} on:touchend={() => moving = false} on:touchmove={onTouchMove}></svelte:window>
 
 <style>
     * {
