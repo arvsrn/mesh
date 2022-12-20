@@ -26,21 +26,10 @@
 
     let loaded: boolean = false;
     onMount(() => loaded = true);
-
-    let isOnMobile: boolean;
-
-    $: {
-        if (loaded) {
-            // @ts-ignore
-            // navigator.userAgent.mobile is still experimental but I'm using it anyway
-            isOnMobile = navigator.userAgent.mobile;
-        }
-    }
 </script>
 
 <Badge />
 
-{#if !isOnMobile}
 <main>
     {#if loaded}
         <div in:fade={{ duration: 100 }}>
@@ -56,11 +45,6 @@
         </div>
     {/if}
 </main>
-{:else}
-<main>
-    <p>Mesh isn't supported on mobile.</p>
-</main>
-{/if}
 
 {#if showEditWindow}
 <Window title={editWindowTitle} close={() => showEditWindow = false}>
