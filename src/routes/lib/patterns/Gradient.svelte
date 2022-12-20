@@ -154,6 +154,19 @@
         return [svgWidth, svgHeight];
     };
 
+    let lastClicked: number | null = null;
+
+    // custom double click handler because on:dblclick doesn't seem to work on mobile
+    const onHandleClicked = (callback: () => void) => {
+        if (lastClicked) {
+            if ((new Date().getTime() - lastClicked) < 500)
+                callback();
+            lastClicked = null;
+        } else {
+            lastClicked = new Date().getTime();
+        }
+    };
+
     setTimeout(generate, 10);
 </script>
 
@@ -161,7 +174,7 @@
     {#if showingHandles}
     <div class="overlay_" id="overlay" on:contextmenu|preventDefault={onContextMenu}>
         {#each blobs as blob, i}
-        <div class="overlay-handle" on:click={() => showWindow(i)} on:dblclick={() => {showWindow(i)}} style="left: {blob.position[1]}px; top: {blob.position[0]}px" on:mousedown={() => {current = i; moving = true}} on:touchstart={() => {current = i; moving = true}}></div>
+        <div class="overlay-handle" on:click={() => onHandleClicked(() => showWindow(i))} style="left: {blob.position[1]}px; top: {blob.position[0]}px" on:mousedown={() => {current = i; moving = true}} on:touchstart={() => {current = i; moving = true}}></div>
         {/each}
     </div>
     {/if}
