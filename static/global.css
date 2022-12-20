@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+* { 
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+
+::selection {
+    background: rgba(24, 145, 251, 0.3);
+}
