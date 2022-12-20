@@ -140,7 +140,7 @@
         navigator.clipboard.writeText(main.outerHTML);
     };
 
-    const updateAspectRatio = (): number[] => {
+    const updateAspectRatio = () => {
         aspectRatio = selected.replace(':', '/');
 
         svgWidth = WIDTH;
@@ -148,10 +148,10 @@
 
         console.log(svgWidth, svgHeight);
         
-        blobs[current].position[1] = Math.min(Math.max(blobs[current].position[1], 9), svgWidth - 9);
-        blobs[current].position[0] = Math.min(Math.max(blobs[current].position[0], 9), svgHeight - 9);
-
-        return [svgWidth, svgHeight];
+        for (let i = 0; i < blobs.length; i++) {
+            blobs[i].position[1] = Math.min(Math.max(blobs[i].position[1], 9), svgWidth - 9);
+            blobs[i].position[0] = Math.min(Math.max(blobs[i].position[0], 9), svgHeight - 9);
+        }
     };
 
     let lastClicked: number | null = null;
@@ -263,12 +263,7 @@
 <svelte:window on:mouseup={() => moving = false} on:touchend={() => moving = false} on:mousemove={onMouseMove} on:touchmove={onTouchMove} on:resize={() => {
     if (window.innerWidth < 800) {
         WIDTH = window.innerWidth - 50;
-        const [width, height] = updateAspectRatio();
-
-        for (let i = 0; i < blobs.length; i++) {
-            blobs[i].position[1] = Math.min(Math.max(blobs[i].position[1], 9), width - 9);
-            blobs[i].position[0] = Math.min(Math.max(blobs[i].position[0], 9), height - 9);
-        }
+        updateAspectRatio();
 
         console.log('on:resize ', WIDTH);
     }
