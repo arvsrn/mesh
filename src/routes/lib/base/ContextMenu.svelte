@@ -52,6 +52,7 @@
 
         color: #ededed;
         user-select: none;
+        word-wrap: normal;
     }
 
     main.dropdown > div:hover {

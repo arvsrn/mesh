@@ -5,7 +5,7 @@
     export let options: string[];
     export let selected: string = options[0];
 
-    $: console.log(selected)
+    $: console.log(selected);
 </script>
 
 <main>

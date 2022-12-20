@@ -59,6 +59,7 @@
     let showingHandles: boolean = true;
     let aspectRatio: string = "16 / 9";
     export let background: string = "#000000";
+    export let blur: number;
 
     let contextMenuPosition: number[] = [0, 0];
     let mousePosition: number[] = [0, 0];
@@ -271,7 +272,7 @@
         
         <defs>
             <filter id="blur1" width="120%" height="120%" filterUnits="userSpaceOnUse" x="-10%" y="-10%">
-                <feGaussianBlur stdDeviation="75" result="effect1_foregroundBlur"></feGaussianBlur>
+                <feGaussianBlur stdDeviation="{blur}" result="effect1_foregroundBlur"></feGaussianBlur>
             </filter>
         </defs>
      

@@ -23,6 +23,7 @@
     let showEditBackgroundWindow: boolean = false;
     let editWindowTitle: string = "";
     let backgroundColor: string = "";
+    let gradientBlur: number = 75;
 
     let loaded: boolean = false;
     onMount(() => loaded = true);
@@ -33,7 +34,7 @@
 <main>
     {#if loaded}
         <div in:fade={{ duration: 100 }}>
-            <Gradient bind:blobs={blobs} bind:background={backgroundColor} showWindow={(idx) => {
+            <Gradient bind:blobs={blobs} bind:background={backgroundColor} bind:blur={gradientBlur} showWindow={(idx) => {
                 showEditBackgroundWindow = false;
                 showEditWindow = true;
                 editWindowTitle = "Edit Blob#" + idx;
@@ -71,6 +72,9 @@
     </div>
     
     <LabeledInput label="Color" bind:value={backgroundColor} />
+    <Divider />
+
+    <LabeledInput label="Blur" bind:value={gradientBlur} />
 </Window>
 {/if}
 
