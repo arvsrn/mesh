@@ -9,3 +9,7 @@
 ::selection {
     background: rgba(24, 145, 251, 0.3);
 }
+
+body {
+    overflow: hidden;
+}
