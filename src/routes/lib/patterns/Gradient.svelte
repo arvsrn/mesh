@@ -374,9 +374,16 @@
         
         color: #7e7e7e;
         margin-right: auto;
+        user-select: none;
     }
 
     .active {
         border: 5px solid #FFFFFF !important;
+    }
+
+    @media only screen and (max-width: 650px) {
+        p {
+            display: none;
+        }
     }
 </style>
