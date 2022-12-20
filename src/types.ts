@@ -4,10 +4,3 @@ export interface Blob {
     blending: string;
     radius: number;
 }
-
-export interface Text {
-    position: number[];
-    text: string;
-    blending: string;
-    color: string;
-}
