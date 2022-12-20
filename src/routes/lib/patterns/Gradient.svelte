@@ -78,6 +78,11 @@
         if (window.innerWidth < 800) {
             WIDTH = window.innerWidth - 100;
             updateAspectRatio();
+        } 
+
+        if (window.innerHeight < 800) {
+            WIDTH = window.innerHeight - 80;
+            updateAspectRatio();
         }
     })
 
@@ -293,7 +298,14 @@
         WIDTH = window.innerWidth - 50;
         updateAspectRatio();
 
-        console.log('on:resize ', WIDTH);
+        console.log('on:resize:x ', WIDTH);
+    }
+
+    if (window.innerHeight < 800) {
+        WIDTH = window.innerHeight - 120;
+        updateAspectRatio();
+
+        console.log('on:resize:y ', WIDTH);
     }
 }}></svelte:window>
 
