@@ -253,7 +253,7 @@
 </main>
 
 {#if showContextMenu}
-    <ContextMenu options={{ 'Edit Background': showEditBackgroundWindow }} position={contextMenuPosition} bind:showing={showContextMenu} />
+    <ContextMenu options={{ 'Edit Background': showEditBackgroundWindow, 'Remove all blobs': () => blobs = [] }} position={contextMenuPosition} bind:showing={showContextMenu} />
 {/if}
 
 {#if showCopiedNotification}
