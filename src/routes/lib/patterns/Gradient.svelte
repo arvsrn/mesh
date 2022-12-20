@@ -15,7 +15,7 @@
     export let blobs: Blob[]; 
 
     let moving: boolean = false;
-    let current: number = 0;
+    let current: number = -1;
 
     const onMouseMove = (e: MouseEvent) => {
         if (moving) {
@@ -69,6 +69,7 @@
     let svgWidth: number = 700;
     let svgHeight: number = 393.75;
 
+    let showAddMenu: boolean = false;
     let WIDTH: number = 700;
 
     $: selected, updateAspectRatio();
@@ -130,9 +131,10 @@
         console.log(blobs);
     };
 
-    const onContextMenu = () => {
+    const onContextMenu = (options: Record<string, () => void>) => {
         showContextMenu = true;
         contextMenuPosition = mousePosition;
+        contextMenuOptions = options;
     };
 
     const copy = () => {
@@ -167,14 +169,40 @@
         }
     };
 
+    const moveTo = (idx: number, to: 'front' | 'back') => {
+        let object = blobs[idx];
+        blobs.splice(idx, 1);
+        
+        if (to == 'front') 
+            blobs = [...blobs, object];
+        else 
+            blobs = [object, ...blobs];
+    };
+
     setTimeout(generate, 10);
+
+    const GRADIENT_OPTIONS = { 'Edit Background': showEditBackgroundWindow, 'Remove all blobs': () => blobs = [] };
+    const BLOB_OPTIONS = { 
+        'Edit': () => showWindow(current),
+        'Duplicate': () => { blobs = [...blobs, {
+            position: [blobs[current].position[0] + 18, blobs[current].position[1] + 18],
+            color: blobs[current].color,
+            blending: blobs[current].blending,
+            radius: blobs[current].radius
+        }] },
+        'Remove': () => { blobs.splice(current, 1); blobs = blobs },
+        'Move to front': () => moveTo(current, 'front'), 
+        'Move to back': () => moveTo(current, 'back'), 
+    }
+
+    let contextMenuOptions: Record<string, () => void> = GRADIENT_OPTIONS;
 </script>
 
 <main style="width: {svgWidth}px; height: {svgHeight}px;">
     {#if showingHandles}
-    <div class="overlay_" id="overlay" on:contextmenu|preventDefault={onContextMenu}>
+    <div class="overlay_" id="overlay" on:contextmenu|preventDefault|self={() => onContextMenu(GRADIENT_OPTIONS)}>
         {#each blobs as blob, i}
-        <div class="overlay-handle" on:click={() => onHandleClicked(() => showWindow(i))} style="left: {blob.position[1]}px; top: {blob.position[0]}px" on:mousedown={() => {current = i; moving = true}} on:touchstart={() => {current = i; moving = true}}></div>
+        <div on:contextmenu|preventDefault={() => onContextMenu(BLOB_OPTIONS)} class:active={current === i} class="overlay-handle" on:click={() => onHandleClicked(() => showWindow(i))} style="left: {blob.position[1]}px; top: {blob.position[0]}px" on:mousedown={() => {current = i; moving = true}} on:touchstart={() => {current = i; moving = true}}></div>
         {/each}
     </div>
     {/if}
@@ -253,7 +281,7 @@
 </main>
 
 {#if showContextMenu}
-    <ContextMenu options={{ 'Edit Background': showEditBackgroundWindow, 'Remove all blobs': () => blobs = [] }} position={contextMenuPosition} bind:showing={showContextMenu} />
+    <ContextMenu options={contextMenuOptions} position={contextMenuPosition} bind:showing={showContextMenu} />
 {/if}
 
 {#if showCopiedNotification}
@@ -334,5 +362,9 @@
         
         color: #7e7e7e;
         margin-right: auto;
+    }
+
+    .active {
+        border: 5px solid #FFFFFF !important;
     }
 </style>
