@@ -180,6 +180,8 @@
     {/if}
 
     <main class="buttons">
+        <p>Right click to edit background & double click handles to edit.</p>
+        
         <IconButton handler={() => showingHandles = !showingHandles}>
             {#if showingHandles}
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -328,5 +330,14 @@
         height: 100%;
 
         border-radius: 4px;
+    }
+
+    p {
+        font-family: Inter;
+        font-size: 12px;
+        font-weight: normal;
+        
+        color: #7e7e7e;
+        margin-right: auto;
     }
 </style>
