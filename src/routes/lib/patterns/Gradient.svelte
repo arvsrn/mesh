@@ -159,7 +159,7 @@
     // custom double click handler because on:dblclick doesn't seem to work on mobile
     const onHandleClicked = (callback: () => void) => {
         if (lastClicked) {
-            if ((new Date().getTime() - lastClicked) < 500)
+            if ((new Date().getTime() - lastClicked) < 900)
                 callback();
             lastClicked = null;
         } else {
@@ -180,7 +180,7 @@
     {/if}
 
     <main class="buttons">
-        <p>Right click to edit background & double click handles to edit blobs.</p>
+        <p>Right click to edit background & double click handles to edit.</p>
         
         <IconButton handler={() => showingHandles = !showingHandles}>
             {#if showingHandles}
@@ -241,7 +241,7 @@
                 <feGaussianBlur stdDeviation="75" result="effect1_foregroundBlur"></feGaussianBlur>
             </filter>
         </defs>
-
+     
         <rect width="{svgWidth}" height="{svgHeight}" fill="{background}"></rect>
 
         <g filter="url(#blur1)">
