@@ -4,6 +4,7 @@
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 ::selection {
