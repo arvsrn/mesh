@@ -76,8 +76,8 @@
     let bounds = boundingRect.getBoundingClientRect()
     if (!bounds) return;
 
-    location[0] = event.y - bounds.y;
-    location[1] = event.x - bounds.x;
+    location[0] = Math.min(Math.max(event.y - bounds.y, 12), boundingRect.clientWidth - 10);
+    location[1] = Math.min(Math.max(event.x - bounds.x, 12), boundingRect.clientHeight - 10);
     location = location;
 
     moving = true;
