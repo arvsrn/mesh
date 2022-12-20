@@ -180,7 +180,7 @@
     {/if}
 
     <main class="buttons">
-        <p>Right click to edit background & double click handles to edit.</p>
+        <p>Right click to edit background & double click handles to edit blobs.</p>
         
         <IconButton handler={() => showingHandles = !showingHandles}>
             {#if showingHandles}
