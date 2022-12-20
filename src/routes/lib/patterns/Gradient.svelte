@@ -7,6 +7,7 @@
     import colors from 'nice-color-palettes';
     import ContextMenu from "../base/ContextMenu.svelte";
     import Notification from "../base/Notification.svelte";
+    import { onMount } from "svelte";
 
     export let showWindow: (idx: number) => void;
     export let showEditBackgroundWindow: () => void;
@@ -35,6 +36,25 @@
         mousePosition = [e.y, e.x];
     };
 
+    const onTouchMove = (e: TouchEvent) => {
+        if (moving) {
+            const boundingRect = document.getElementById('overlay')?.getBoundingClientRect();
+            if (!boundingRect) return;
+
+            blobs[current].position[1] = e.touches[0].pageX - boundingRect.left;
+            blobs[current].position[0] = e.touches[0].pageY - boundingRect.top;
+            
+            console.log(boundingRect.left, boundingRect.width, boundingRect.top, boundingRect.height, e.touches[0].pageX, e.touches[0].pageY);
+
+            blobs[current].position[1] = Math.min(Math.max(blobs[current].position[1], 9), boundingRect.width - 9);
+            blobs[current].position[0] = Math.min(Math.max(blobs[current].position[0], 9), boundingRect.height - 9);
+            
+            blobs = blobs;
+        }
+
+        mousePosition = [e.touches[0].pageY, e.touches[0].pageX];
+    };
+
     let selected: "16:9" | "4:3" | "1:1" | "3:2" = "4:3";
     let showingHandles: boolean = true;
     let aspectRatio: string = "16 / 9";
@@ -49,9 +69,16 @@
     let svgWidth: number = 700;
     let svgHeight: number = 393.75;
 
-    const WIDTH: number = 700;
+    let WIDTH: number = 700;
 
     $: selected, updateAspectRatio();
+
+    onMount(() => {
+        if (window.innerWidth < 800) {
+            WIDTH = window.innerWidth - 100;
+            updateAspectRatio();
+        }
+    })
 
     const generate = () => {
         let i = Math.floor(Math.random() * colors.length);
@@ -113,7 +140,7 @@
         navigator.clipboard.writeText(main.outerHTML);
     };
 
-    const updateAspectRatio = () => {
+    const updateAspectRatio = (): number[] => {
         aspectRatio = selected.replace(':', '/');
 
         svgWidth = WIDTH;
@@ -123,6 +150,8 @@
         
         blobs[current].position[1] = Math.min(Math.max(blobs[current].position[1], 9), svgWidth - 9);
         blobs[current].position[0] = Math.min(Math.max(blobs[current].position[0], 9), svgHeight - 9);
+
+        return [svgWidth, svgHeight];
     };
 
     setTimeout(generate, 10);
@@ -132,7 +161,7 @@
     {#if showingHandles}
     <div class="overlay_" id="overlay" on:contextmenu|preventDefault={onContextMenu}>
         {#each blobs as blob, i}
-        <div class="overlay-handle" on:dblclick={() => {showWindow(i)}} style="left: {blob.position[1]}px; top: {blob.position[0]}px" on:mousedown={() => {current = i; moving = true}}></div>
+        <div class="overlay-handle" on:click={() => showWindow(i)} on:dblclick={() => {showWindow(i)}} style="left: {blob.position[1]}px; top: {blob.position[0]}px" on:mousedown={() => {current = i; moving = true}} on:touchstart={() => {current = i; moving = true}}></div>
         {/each}
     </div>
     {/if}
@@ -216,7 +245,19 @@
     <Notification bind:showing={showCopiedNotification}>✨ Copied SVG to clipboard</Notification>
 {/if}
 
-<svelte:window on:mouseup={() => moving = false} on:mousemove={onMouseMove}></svelte:window>
+<svelte:window on:mouseup={() => moving = false} on:touchend={() => moving = false} on:mousemove={onMouseMove} on:touchmove={onTouchMove} on:resize={() => {
+    if (window.innerWidth < 800) {
+        WIDTH = window.innerWidth - 50;
+        const [width, height] = updateAspectRatio();
+
+        for (let i = 0; i < blobs.length; i++) {
+            blobs[i].position[1] = Math.min(Math.max(blobs[i].position[1], 9), width - 9);
+            blobs[i].position[0] = Math.min(Math.max(blobs[i].position[0], 9), height - 9);
+        }
+
+        console.log('on:resize ', WIDTH);
+    }
+}}></svelte:window>
 
 <style>
     main:not(.buttons) {
