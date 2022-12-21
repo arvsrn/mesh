@@ -202,6 +202,8 @@
     }
 
     let contextMenuOptions: Record<string, () => void> = GRADIENT_OPTIONS;
+
+    $: console.log(blobs);
 </script>
 
 <main style="width: {svgWidth}px; height: {svgHeight}px;">
@@ -249,6 +251,11 @@
         <Dropdown options={["16:9", "1:1", "4:3", "3:2"]} bind:selected={selected} layout={62.58} />
         <Button color="grey" handler={add}>Add</Button>
         <Button color="purple" handler={copy}>Copy</Button>
+        <Button color="purple" handler={() => navigator.clipboard.writeText(JSON.stringify({
+            background: background,
+            blur: blur,
+            blobs: blobs
+        }))}>Copy (2)</Button>
     </main>
 
     <svg class="main" bind:this={main} xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 {svgWidth} {svgHeight}">

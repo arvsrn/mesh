@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let color: "grey" | "purple" | "green" | "red" | "blue" = "grey";
+    export let color: "grey" | "purple" | "green" | "red" | "blue" | "yellow" = "grey";
     export let cursor: "pointer" | "normal" = "normal";
     export let handler: () => void;
 </script>
@@ -101,5 +101,18 @@
 
     button.blue:active {
         background: #0F3058;
+    }
+
+    button.yellow {
+        background: #2C2100;
+        color: #F0C000;
+    }
+
+    button.yellow:hover {
+        background: #352800;
+    }
+
+    button.yellow:active {
+        background: #3E3000;
     }
 </style>

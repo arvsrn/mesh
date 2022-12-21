@@ -1,14 +1,17 @@
 <script lang="ts">
+    import { page } from "$app/stores";
+    import { BlobDataFrom } from "../parse";
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
     import type { Blob } from "../types";
-    import Badge from "./lib/Badge.svelte";
     import ColorPicker from "./lib/base/ColorPicker.svelte";
     import Divider from "./lib/base/Divider.svelte";
     import Window from "./lib/base/Window.svelte";
     import Gradient from "./lib/patterns/Gradient.svelte";
     import LabeledDropdown from "./lib/patterns/LabeledDropdown.svelte";
     import LabeledInput from "./lib/patterns/LabeledInput.svelte";
+    import Badge from "./lib/Badge.svelte";
+    import Actions from "./lib/Actions.svelte";
 
     let blobs: Blob[] = [
         {
@@ -27,9 +30,21 @@
 
     let loaded: boolean = false;
     onMount(() => loaded = true);
+
+    let source = $page.url.searchParams.get('src');
+    
+    setTimeout(() => {
+        if (source) {
+            const gradient = BlobDataFrom.string(source);
+            blobs = gradient.blobs;
+            backgroundColor = gradient.background;
+            gradientBlur = gradient.blur;
+        }
+    }, 20);
 </script>
 
 <Badge />
+<Actions />
 
 <main>
     {#if loaded}
@@ -88,13 +103,5 @@
         gap: 8px;
         align-items: center;
         justify-content: center;
-    }
-
-    p {
-        font-family: Inter;
-        font-size: 14px;
-        font-weight: normal;
-        
-        color: #ededed;
     }
 </style>
