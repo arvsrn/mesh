@@ -210,7 +210,7 @@
     {#if showingHandles}
     <div class="overlay_" id="overlay" on:contextmenu|preventDefault|self={() => onContextMenu(GRADIENT_OPTIONS)}>
         {#each blobs as blob, i}
-        <div on:contextmenu|preventDefault={() => onContextMenu(BLOB_OPTIONS)} class:active={current === i} class="overlay-handle" on:click={() => onHandleClicked(() => showWindow(i))} style="left: {blob.position[1]}px; top: {blob.position[0]}px" on:mousedown={() => {current = i; moving = true}} on:touchstart={() => {current = i; moving = true}}></div>
+        <div on:contextmenu|preventDefault={() => onContextMenu(BLOB_OPTIONS)} class:active={current === i} class="overlay-handle" on:click={() => onHandleClicked(() => showWindow(i))} style="left: {blob.position[1]}px; top: {blob.position[0]}px; background: {blob.color}" on:mousedown={() => {current = i; moving = true}} on:touchstart={() => {current = i; moving = true}}></div>
         {/each}
     </div>
     {/if}
@@ -357,7 +357,7 @@
         margin-top: -9px;
 
         background: #9E8CFC;
-        border: 3px solid #FFFFFF;
+        border: 1.5px solid #FFFFFF;
 
         cursor: grab;
     }
@@ -381,7 +381,7 @@
     }
 
     .active {
-        border: 5px solid #FFFFFF !important;
+        border: 3.5px solid #FFFFFF !important;
     }
 
     @media only screen and (max-width: 650px) {
