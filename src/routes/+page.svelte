@@ -44,7 +44,7 @@
 </script>
 
 <Badge />
-<Actions />
+<Actions getGradientLink={() => BlobDataFrom.blobs({ background: backgroundColor, blur: gradientBlur, blobs: blobs })} />
 
 <main>
     {#if loaded}
