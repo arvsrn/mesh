@@ -65,7 +65,7 @@
 <main>
     <main>
         <h1 style="font-family: Inter; font-size: 24px; font-weight: 900; color: white;">Gallery</h1>
-        <p style="font-family: Inter; font-size: 14px; font-weight: normal; color: #a0a0a0; width: {svgWidth}px">Beautiful pre-made gradients. Right click for options.</p>
+        <p style="font-family: Inter; font-size: 14px; font-weight: normal; color: #a0a0a0; width: {svgWidth}px">Beautiful pre-made gradients. Right click to copy SVG or open in editor.</p>
 
         <div class="gradients" style="width: {svgWidth}px; height: fit-content;">
             {#each gradients as blobs, i}
