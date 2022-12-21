@@ -121,7 +121,7 @@
     <Notification bind:showing={showCopiedNotification}>✨ Copied SVG to clipboard</Notification>
 {/if}
 
-<svelte:window on:mousemove={(e) => mousePosition = [e.y, e.x]} on:resize={onResize}></svelte:window>
+<svelte:window on:mousemove={(e) => mousePosition = [e.pageY, e.pageX]} on:resize={onResize}></svelte:window>
 
 <style>
     * {
