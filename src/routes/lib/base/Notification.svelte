@@ -40,7 +40,7 @@
         width: fit-content;
         height: fit-content;
 
-        position: absolute;
+        position: fixed;
         left: 50vw;
         transform: translateX(-50%);
         bottom: 24px;
