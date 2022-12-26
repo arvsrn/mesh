@@ -99,7 +99,7 @@
         height: 100vh;
 
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         gap: 8px;
         align-items: center;
         justify-content: center;

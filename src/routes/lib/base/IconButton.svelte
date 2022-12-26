@@ -1,8 +1,11 @@
 <script lang="ts">
     export let handler: () => void;
+
+    // just to get that 100/100/100/100 pagespeed score lol
+    export let label: string;
 </script>
 
-<button on:click={handler}>
+<button on:click={handler} aria-label={label}>
     <slot></slot>
 </button>
 
