@@ -64,6 +64,7 @@
     * {
         box-sizing: border-box;
     }
+
     main.outer {
         user-select: none;
         display: flex;
@@ -154,5 +155,20 @@
         display: flex;
         flex-direction: column;
         gap: 4px;
+    }
+
+    @media only screen and (max-width: 400px) {
+        main.outer {
+            width: 100vw !important;
+            height: 80vh !important;
+            position: absolute;
+            bottom: 0px !important;
+            top: auto !important;
+            left: 0px !important;
+        }
+
+        main.inner {
+            overflow-x: auto !important;
+        }
     }
 </style>

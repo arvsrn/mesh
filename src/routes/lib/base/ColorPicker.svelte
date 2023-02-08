@@ -92,7 +92,7 @@
     moving = true;
 }}>
     <div 
-        class="handle" style="margin-top: {location[0] - 12}px; margin-left: {location[1] - 12}px" 
+        class="handle" style="margin-top: {location[0] - 12}px; margin-left: {location[1] - 12}px; background: {chroma(color).darken(1)}" 
         on:mousedown={() => {
             moving = true;
         }} class:grabbing={moving}
@@ -164,7 +164,7 @@
         margin-top: -12px;
 
         background: #9E8CFC;
-        border: 3px solid #FFFFFF;
+        border: 1.5px solid #FFFFFF;
 
         cursor: grab;
         z-index: 100;

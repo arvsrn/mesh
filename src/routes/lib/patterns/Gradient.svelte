@@ -1,10 +1,9 @@
 <script lang="ts">
-    import chroma from "chroma-js";
+    import chroma, { random } from "chroma-js";
     import type { Blob } from "../../../types";
     import Button from "../base/Button.svelte";
     import Dropdown from "../base/Dropdown.svelte";
     import IconButton from "../base/IconButton.svelte";
-    import colors from 'nice-color-palettes';
     import ContextMenu from "../base/ContextMenu.svelte";
     import Notification from "../base/Notification.svelte";
     import { onMount } from "svelte";
@@ -78,43 +77,56 @@
 
     $: selected, updateAspectRatio();
 
-    onMount(() => {
-        if (window.innerWidth < 800) {
-            WIDTH = window.innerWidth - 100;
-            updateAspectRatio();
-        } 
+    const randomColor = (): number[] => {
+        const randomInt = (min: number, max: number) => {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
 
-        if (window.innerHeight < 800) {
-            WIDTH = window.innerHeight - 80;
-            updateAspectRatio();
+        let h = randomInt(0, 360);
+        let s = randomInt(70, 100);
+        let l = 90;
+        return [h, s, l];
+    };
+
+    const randomPalette = (len: number = 4): Array<string> => {
+        let palette: Array<string> = [
+            chroma(randomColor()).hex(),
+        ];
+
+        for (let i = 0; i < len; i++) {
+            let hue = chroma(palette[i]).hsl();
+            hue[0] += Math.random() * 30;
+            palette.push(chroma.hsl(...hue).hex());
         }
-    })
+
+        return palette;
+    }
 
     const generate = () => {
-        let i = Math.floor(Math.random() * colors.length);
+        let palette = randomPalette();
         
         blobs = [
             {
-                color: colors[i][1],
+                color: palette[0],
                 position: randomPosition(),
                 blending: 'Normal',
                 radius: 200,
             },
             {
-                color: colors[i][2],
+                color: palette[1],
                 position: randomPosition(),
                 blending: 'Normal',
                 radius: 200,
             },
             {
-                color: colors[i][3],
+                color: palette[2],
                 position: randomPosition(),
                 blending: 'Normal',
                 radius: 200,
             }
         ];
 
-        background = colors[i][0];
+        background = palette[4];
     };
 
     const randomPosition = (): number[] => {
@@ -128,10 +140,8 @@
     };
 
     const add = () => {
-        let i = Math.floor(Math.random() * colors.length);
-
         blobs = [...blobs, {
-            color: colors[i][1],
+            color: chroma(randomColor()).hex(),
             position: [200, 400],
             blending: "Normal",
             radius: 200,
@@ -213,7 +223,7 @@
     {#if showingHandles}
     <div class="overlay_" id="overlay" on:contextmenu|preventDefault|self={() => onContextMenu(GRADIENT_OPTIONS)}>
         {#each blobs as blob, i}
-        <div on:contextmenu|preventDefault={() => onContextMenu(BLOB_OPTIONS)} class:active={current === i} class="overlay-handle" on:click={() => onHandleClicked(() => showWindow(i))} style="left: {blob.position[1]}px; top: {blob.position[0]}px; background: {blob.color}" on:mousedown={() => {current = i; moving = true}} on:touchstart={() => {current = i; moving = true}}></div>
+        <div on:contextmenu|preventDefault={() => onContextMenu(BLOB_OPTIONS)} class:active={current === i} class="overlay-handle" style="left: {blob.position[1]}px; top: {blob.position[0]}px; background: {blob.color}" on:mousedown={() => {current = i; moving = true}} on:touchstart={() => {current = i; moving = true}}></div>
         {/each}
     </div>
     {/if}
@@ -280,7 +290,7 @@
                 <feGaussianBlur stdDeviation="{blur}" result="effect1_foregroundBlur"></feGaussianBlur>
             </filter>
         </defs>
-     
+        
         <rect width="{svgWidth}" height="{svgHeight}" fill="{background}"></rect>
 
         <g filter="url(#blur1)">
@@ -299,21 +309,7 @@
     <Notification bind:showing={showCopiedNotification}>✨ Copied SVG to clipboard</Notification>
 {/if}
 
-<svelte:window on:mouseup={() => moving = false} on:touchend={() => moving = false} on:mousemove={onMouseMove} on:touchmove={onTouchMove} on:resize={() => {
-    if (window.innerWidth < 800) {
-        WIDTH = window.innerWidth - 50;
-        updateAspectRatio();
-
-        console.log('on:resize:x ', WIDTH);
-    }
-
-    if (window.innerHeight < 800) {
-        WIDTH = window.innerHeight - 120;
-        updateAspectRatio();
-
-        console.log('on:resize:y ', WIDTH);
-    }
-}}></svelte:window>
+<svelte:window on:mouseup={() => moving = false} on:touchend={() => moving = false} on:mousemove={onMouseMove} on:touchmove={onTouchMove}></svelte:window>
 
 <style>
     main:not(.buttons) {
